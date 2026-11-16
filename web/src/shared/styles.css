@@ -1,0 +1,184 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Ranglar "R G B" ko'rinishida (Tailwind opacity modifikatorlari uchun).
+ * Kun: oq + shokolad. Tun: to'q shokolad + karamel.
+ */
+:root {
+  --c-primary: 111 78 55; /* #6F4E37 */
+  --c-primary-dark: 74 50 36; /* #4A3224 */
+  --c-primary-light: 164 117 81; /* #A47551 */
+  --c-primary-soft: 243 236 230; /* #F3ECE6 */
+  --c-accent: 217 160 102; /* #D9A066 */
+  --c-bg: 255 255 255;
+  --c-surface: 250 247 245; /* #FAF7F5 */
+  --c-card: 255 255 255;
+  --c-ink: 43 29 20; /* #2B1D14 */
+  --c-muted: 140 123 112; /* #8C7B70 */
+  --c-line: 234 223 215; /* #EADFD7 */
+  --c-danger: 192 57 43;
+  --c-danger-soft: 251 234 232;
+  --c-success: 46 125 50;
+  --c-success-soft: 232 243 233;
+  --c-warning: 168 106 30;
+  --c-warning-soft: 252 241 227;
+  --c-info: 47 94 158;
+  --c-info-soft: 234 241 251;
+  --c-shadow: 74 50 36;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --c-primary: 181 125 86; /* karamel-shokolad tugmalar */
+  --c-primary-dark: 238 208 178; /* sarlavha / urg'u matni */
+  --c-primary-light: 205 160 120;
+  --c-primary-soft: 58 41 31;
+  --c-accent: 222 168 110;
+  --c-bg: 22 15 11; /* #160F0B */
+  --c-surface: 30 21 16;
+  --c-card: 40 29 22;
+  --c-ink: 245 236 228;
+  --c-muted: 170 152 139;
+  --c-line: 64 48 38;
+  --c-danger: 235 117 100;
+  --c-danger-soft: 66 31 26;
+  --c-success: 112 192 118;
+  --c-success-soft: 28 50 31;
+  --c-warning: 232 172 92;
+  --c-warning-soft: 62 45 22;
+  --c-info: 136 176 232;
+  --c-info-soft: 27 39 61;
+  --c-shadow: 0 0 0;
+  color-scheme: dark;
+}
+
+html,
+body {
+  background: rgb(var(--c-bg));
+  color: rgb(var(--c-ink));
+  -webkit-tap-highlight-color: transparent;
+  font-family: Nunito, system-ui, sans-serif;
+  transition: background-color 0.2s ease;
+}
+
+/* Xarita tun rejimida ko'zni qamashtirmasin */
+:root[data-theme='dark'] .leaflet-tile-pane {
+  filter: brightness(0.72) contrast(1.08) saturate(0.85);
+}
+
+body {
+  overscroll-behavior-y: none;
+}
+
+input,
+textarea,
+select {
+  font-size: 16px;
+}
+
+@layer components {
+  .input {
+    @apply w-full rounded-xl border border-line bg-card px-3.5 py-2.5 text-[15px] text-ink outline-none transition placeholder:text-muted/70 focus:border-primary-light focus:ring-2 focus:ring-primary-soft disabled:bg-surface disabled:text-muted;
+  }
+  .label {
+    @apply mb-1.5 block text-[13px] font-semibold text-primary-dark;
+  }
+  .card {
+    @apply rounded-card bg-card shadow-card;
+  }
+  .chip {
+    @apply inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-line bg-card px-3.5 py-1.5 text-[13px] font-semibold text-ink transition;
+  }
+  .chip-active {
+    @apply border-primary bg-primary text-white;
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .tbl {
+    @apply w-full border-collapse text-left text-sm;
+  }
+  .tbl th {
+    @apply whitespace-nowrap border-b border-line bg-surface px-3 py-2.5 text-xs font-bold uppercase tracking-wide text-muted;
+  }
+  .tbl td {
+    @apply border-b border-line/70 px-3 py-2.5 align-middle;
+  }
+  .tbl tr:hover td {
+    @apply bg-surface/60;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, rgb(var(--c-primary-soft)) 0%, rgb(var(--c-surface)) 50%, rgb(var(--c-primary-soft)) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.3s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.18s ease-out;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.sheet-in {
+  animation: sheetIn 0.22s ease-out;
+}
+@keyframes sheetIn {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* Sarlavhalar uchun shokolad uslubidagi shrift */
+.font-display {
+  letter-spacing: -0.01em;
+}
+
+.pb-safe {
+  padding-bottom: calc(var(--safe-bottom) + 8px);
+}
+
+/* Leaflet */
+.leaflet-container {
+  font-family: inherit;
+  border-radius: 14px;
+  z-index: 0;
+}
+.map-pin {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgb(var(--c-primary));
+  border: 4px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}

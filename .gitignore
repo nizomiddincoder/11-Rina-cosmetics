@@ -1,0 +1,9 @@
+node_modules
+dist
+.env
+.env.railway
+*.log
+/data
+uploads-dev
+.pgdata
+.DS_Store

@@ -1,0 +1,13 @@
+node_modules
+**/node_modules
+**/dist
+.git
+.env
+.env.railway
+*.log
+data
+uploads-dev
+**/uploads-dev
+.pgdata
+.claude
+scripts
