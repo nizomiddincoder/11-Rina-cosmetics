@@ -9,7 +9,6 @@ import { Button, Card, Empty, ErrorState, PageLoader, ReasonModal, Skeleton, use
 import { OrderItemsList, OrderTimeline, OrderTotals, ProductThumb, StatusBadge } from '../../shared/orderParts';
 import { dateTime, money } from '../../shared/format';
 import { PageHeader, Screen, TopTitle } from '../layout';
-import { DesignBlock } from '../../shared/DesignBlock';
 
 export function OrdersPage() {
   const { t } = useTranslation();
@@ -114,8 +113,6 @@ export function OrderDetailPage() {
             <StatusBadge status={o.status} />
           </div>
         </Card>
-
-        <DesignBlock order={o} download={false} />
 
         {o.readyPhotoUrl && (
           <Card className="overflow-hidden">

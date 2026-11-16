@@ -102,7 +102,7 @@ export function useMainButton(opts: { text: string; onClick: () => void; visible
     if (!mb) return;
     mb.setParams({
       text: opts.text,
-      color: opts.disabled ? '#A47551' : '#6F4E37',
+      color: opts.disabled ? '#E08AA4' : '#BE4E74',
       text_color: '#FFFFFF',
       is_active: !opts.disabled,
       is_visible: visible,

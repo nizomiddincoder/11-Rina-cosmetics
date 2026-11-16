@@ -66,7 +66,7 @@ function InviteResult({ invite }: { invite: Invite }) {
   const toast = useToast();
   const [qr, setQr] = useState('');
   useEffect(() => {
-    QRCode.toDataURL(invite.link, { width: 260, margin: 1, color: { dark: '#4A3224', light: '#FFFFFF' } }).then(setQr).catch(() => setQr(''));
+    QRCode.toDataURL(invite.link, { width: 260, margin: 1, color: { dark: '#7A2A4A', light: '#FFFFFF' } }).then(setQr).catch(() => setQr(''));
   }, [invite.link]);
   return (
     <div className="space-y-3 text-center">

@@ -1,6 +1,5 @@
 import { Suspense, lazy, useEffect } from 'react';
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import type { PersonalCheckoutState } from './PersonalPage';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { House, LayoutGrid, ReceiptText, ShoppingCart, UserRound } from 'lucide-react';
 import { BottomNav } from '../layout';
@@ -18,7 +17,6 @@ const loaders = {
   product: () => import('./ProductPage'),
   cart: () => import('./CartPage'),
   checkout: () => import('./CheckoutPage'),
-  personal: () => import('./PersonalPage'),
   orders: () => import('./OrdersPage'),
   profile: () => import('./ProfilePage'),
 };
@@ -27,7 +25,6 @@ const SearchPage = lazy(() => loaders.catalog().then((m) => ({ default: m.Search
 const ProductPage = lazy(() => loaders.product().then((m) => ({ default: m.ProductPage })));
 const CartPage = lazy(() => loaders.cart().then((m) => ({ default: m.CartPage })));
 const CheckoutPage = lazy(() => loaders.checkout().then((m) => ({ default: m.CheckoutPage })));
-const PersonalPage = lazy(() => loaders.personal().then((m) => ({ default: m.PersonalPage })));
 const OrdersPage = lazy(() => loaders.orders().then((m) => ({ default: m.OrdersPage })));
 const OrderDetailPage = lazy(() => loaders.orders().then((m) => ({ default: m.OrderDetailPage })));
 const ProfilePage = lazy(() => loaders.profile().then((m) => ({ default: m.ProfilePage })));
@@ -44,14 +41,6 @@ function usePrefetchPages() {
   }, []);
 }
 
-/** Dizayn tayyor bo'lmasa (masalan sahifa yangilansa) muharrirga qaytaradi */
-function PersonalCheckoutRoute() {
-  const location = useLocation();
-  const state = location.state as PersonalCheckoutState | null;
-  if (!state?.designUrl) return <Navigate to="/personal" replace />;
-  return <CheckoutPage personal={state} />;
-}
-
 export function CustomerApp() {
   const { t } = useTranslation();
   const cart = useCart();
@@ -66,8 +55,6 @@ export function CustomerApp() {
         <Route path="/product/:id" element={<ProductPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
-        <Route path="/personal" element={<PersonalPage />} />
-        <Route path="/personal/checkout" element={<PersonalCheckoutRoute />} />
         <Route path="/orders" element={<OrdersPage />} />
         <Route path="/orders/:id" element={<OrderDetailPage />} />
         <Route path="/profile" element={<ProfilePage />} />

@@ -169,7 +169,7 @@ export function SettingsPage() {
 type StorageHealth = {
   total: number;
   volume: boolean;
-  missing: { kind: 'logo' | 'banner' | 'category' | 'product' | 'template'; id: number | null; name: string; url: string }[];
+  missing: { kind: 'logo' | 'banner' | 'category' | 'product'; id: number | null; name: string; url: string }[];
 };
 
 const FIX_PATH: Record<StorageHealth['missing'][number]['kind'], (id: number | null) => string> = {
@@ -177,7 +177,6 @@ const FIX_PATH: Record<StorageHealth['missing'][number]['kind'], (id: number | n
   banner: () => '/banners',
   category: () => '/categories',
   product: (id) => `/products/${id}`,
-  template: () => '/templates',
 };
 
 type ResetKey = 'orders' | 'catalog' | 'customers' | 'stock';

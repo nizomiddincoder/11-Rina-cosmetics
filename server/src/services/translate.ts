@@ -85,15 +85,7 @@ async function translateBanner(id: number) {
   await prisma.banner.updateMany({ where: { id, titleUz: b.titleUz }, data: { titleRu: r.title } });
 }
 
-async function translateTemplate(id: number) {
-  const t = await prisma.personalTemplate.findUnique({ where: { id }, select: { titleUz: true } });
-  if (!t) return;
-  const r = await translateUzToRu({ title: t.titleUz });
-  if (!r) return;
-  await prisma.personalTemplate.updateMany({ where: { id, titleUz: t.titleUz }, data: { titleRu: r.title } });
-}
-
-const JOBS = { product: translateProduct, category: translateCategory, banner: translateBanner, template: translateTemplate };
+const JOBS = { product: translateProduct, category: translateCategory, banner: translateBanner };
 
 /** Fonda tarjima qiladi (saqlash tarjimani kutmaydi) */
 export function enqueueTranslation(entity: keyof typeof JOBS, id: number) {

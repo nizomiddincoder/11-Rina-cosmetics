@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { Camera, CarTaxiFront, CheckCheck, ChefHat, CircleX, HandCoins, PackageCheck, Scale } from 'lucide-react';
 import { get, post, upload } from './api';
 import { CameraCapture, cameraSupported } from './CameraCapture';
-import { DesignBlock } from './DesignBlock';
 import type { Order, Role } from './types';
 import { Badge, Button, Card, ErrorState, PageLoader, ReasonModal, useToast } from './ui';
 import { OrderContactBlock, OrderItemsList, OrderTimeline, OrderTotals, StatusBadge } from './orderParts';
@@ -90,7 +89,6 @@ export function StaffOrderDetail({
           <div>
             <div className="flex items-center gap-2">
               <div className="font-display text-[24px] font-bold text-ink">#{o.number}</div>
-              {o.isPersonal && <Badge tone="accent">{t('personal.badge')}</Badge>}
             </div>
             <div className="text-[12px] text-muted">{dateTime(o.createdAt)}</div>
           </div>
@@ -117,8 +115,6 @@ export function StaffOrderDetail({
           <OrderTotals order={o} />
         </div>
       </Card>
-
-      <DesignBlock order={o} />
 
       {canWeigh && (
         <Card className="p-4">

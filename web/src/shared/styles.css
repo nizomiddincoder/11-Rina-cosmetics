@@ -4,20 +4,21 @@
 
 /*
  * Ranglar "R G B" ko'rinishida (Tailwind opacity modifikatorlari uchun).
- * Kun: oq + shokolad. Tun: to'q shokolad + karamel.
+ * Kun: och pushti (blush) + atirgul. Tun: to'q olxo'ri + yumshoq pushti.
+ * --c-bg o'zgarsa theme.ts dagi TG_COLORS va app/index.html dagi theme-color ham yangilansin.
  */
 :root {
-  --c-primary: 111 78 55; /* #6F4E37 */
-  --c-primary-dark: 74 50 36; /* #4A3224 */
-  --c-primary-light: 164 117 81; /* #A47551 */
-  --c-primary-soft: 243 236 230; /* #F3ECE6 */
-  --c-accent: 217 160 102; /* #D9A066 */
-  --c-bg: 255 255 255;
-  --c-surface: 250 247 245; /* #FAF7F5 */
+  --c-primary: 190 78 116; /* #BE4E74 — tugmalar (oq matn bilan o'qiladi) */
+  --c-primary-dark: 122 42 74; /* #7A2A4A — sarlavha / urg'u matni */
+  --c-primary-light: 224 138 164; /* #E08AA4 */
+  --c-primary-soft: 253 234 240; /* #FDEAF0 */
+  --c-accent: 229 152 155; /* #E5989B */
+  --c-bg: 255 251 252; /* #FFFBFC */
+  --c-surface: 254 244 247; /* #FEF4F7 */
   --c-card: 255 255 255;
-  --c-ink: 43 29 20; /* #2B1D14 */
-  --c-muted: 140 123 112; /* #8C7B70 */
-  --c-line: 234 223 215; /* #EADFD7 */
+  --c-ink: 58 32 44; /* #3A202C */
+  --c-muted: 140 108 121; /* #8C6C79 */
+  --c-line: 246 221 229; /* #F6DDE5 */
   --c-danger: 192 57 43;
   --c-danger-soft: 251 234 232;
   --c-success: 46 125 50;
@@ -26,24 +27,24 @@
   --c-warning-soft: 252 241 227;
   --c-info: 47 94 158;
   --c-info-soft: 234 241 251;
-  --c-shadow: 74 50 36;
+  --c-shadow: 122 42 74;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   color-scheme: light;
 }
 
 :root[data-theme='dark'] {
-  --c-primary: 181 125 86; /* karamel-shokolad tugmalar */
-  --c-primary-dark: 238 208 178; /* sarlavha / urg'u matni */
-  --c-primary-light: 205 160 120;
-  --c-primary-soft: 58 41 31;
-  --c-accent: 222 168 110;
-  --c-bg: 22 15 11; /* #160F0B */
-  --c-surface: 30 21 16;
-  --c-card: 40 29 22;
-  --c-ink: 245 236 228;
-  --c-muted: 170 152 139;
-  --c-line: 64 48 38;
+  --c-primary: 196 90 127; /* #C45A7F — atirgul tugmalar */
+  --c-primary-dark: 248 200 215; /* #F8C8D7 — sarlavha / urg'u matni */
+  --c-primary-light: 226 140 168; /* #E28CA8 */
+  --c-primary-soft: 62 34 46; /* #3E222E */
+  --c-accent: 240 168 160; /* #F0A8A0 */
+  --c-bg: 24 14 19; /* #180E13 */
+  --c-surface: 32 20 26; /* #20141A */
+  --c-card: 43 28 36; /* #2B1C24 */
+  --c-ink: 248 236 240;
+  --c-muted: 180 152 163;
+  --c-line: 70 44 56;
   --c-danger: 235 117 100;
   --c-danger-soft: 66 31 26;
   --c-success: 112 192 118;
@@ -159,7 +160,7 @@ select {
   }
 }
 
-/* Sarlavhalar uchun shokolad uslubidagi shrift */
+/* Sarlavhalar uchun nafis serif shrift */
 .font-display {
   letter-spacing: -0.01em;
 }

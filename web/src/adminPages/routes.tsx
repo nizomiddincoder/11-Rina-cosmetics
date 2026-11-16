@@ -1,6 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { BarChart3, Boxes, FileSpreadsheet, Gift, History, Image, LayoutDashboard, Megaphone, Package, ReceiptText, Settings, Tags, Users, UsersRound, type LucideIcon } from 'lucide-react';
-import { TemplatesPage } from './Templates';
+import { BarChart3, Boxes, FileSpreadsheet, History, Image, LayoutDashboard, Megaphone, Package, ReceiptText, Settings, Tags, Users, UsersRound, type LucideIcon } from 'lucide-react';
 import { DashboardPage } from './Dashboard';
 import { OrderPage, OrdersPage } from './Orders';
 import { CustomerPage, CustomersPage } from './Customers';
@@ -19,7 +18,6 @@ export const ADMIN_MENU: { to: string; icon: LucideIcon; key: string }[] = [
   { to: '/categories', icon: Tags, key: 'admin.categories' },
   { to: '/warehouse', icon: Boxes, key: 'admin.warehouse' },
   { to: '/staff', icon: UsersRound, key: 'admin.staff' },
-  { to: '/templates', icon: Gift, key: 'admin.templates' },
   { to: '/broadcast', icon: Megaphone, key: 'admin.broadcast' },
   { to: '/banners', icon: Image, key: 'admin.banners' },
   { to: '/settings', icon: Settings, key: 'admin.settings' },
@@ -46,7 +44,6 @@ export function AdminRoutes({ extra }: { extra?: React.ReactNode }) {
       <Route path="/warehouse" element={<WarehousePage />} />
       <Route path="/warehouse/low" element={<WarehousePage />} />
       <Route path="/staff" element={<StaffPage />} />
-      <Route path="/templates" element={<TemplatesPage />} />
       <Route path="/broadcast" element={<BroadcastPage />} />
       <Route path="/banners" element={<BannersPage />} />
       <Route path="/settings" element={<SettingsPage />} />

@@ -7,9 +7,6 @@ import { requireTgUser } from '../lib/auth';
 import { round3, toNum } from '../lib/format';
 import { cancelOrder, createOrder, validateQty } from '../services/orders';
 import { setMenuButtonFor } from '../bot/handlers';
-import { designUpload } from '../lib/upload';
-import { saveJpeg } from '../services/storage';
-import { aiEnabled, cutoutSubject } from '../services/ai';
 
 export const customerRouter = Router();
 customerRouter.use(requireTgUser);
@@ -164,69 +161,6 @@ customerRouter.post(
       })
       .parse(req.body);
     const order = await createOrder(req.actor!.user!, body);
-    res.status(201).json({ id: order.id, number: order.number });
-  }),
-);
-
-// ---------- "Mening shokoladim" ----------
-
-/** Mijoz tayyorlagan dizayn (shablon + rasm + matn) — yuqori sifatli JPG sifatida saqlanadi */
-customerRouter.post(
-  '/designs',
-  designUpload.single('file'),
-  ah(async (req, res) => {
-    if (!req.file) throw badRequest('NO_FILE', 'Rasm topilmadi');
-    const saved = await saveJpeg(req.file.buffer, 'designs', { maxSize: 4000, quality: 95 });
-    res.status(201).json({ url: saved.url, width: saved.width, height: saved.height });
-  }),
-);
-
-/**
- * "Mening shokoladim": AI mijoz rasmidan odamni qirqib oladi (shaffof fonli PNG).
- * Natija saqlanmaydi — to'g'ridan-to'g'ri qaytariladi, dizayn mijoz telefonida yig'iladi.
- */
-const cutoutHits = new Map<number, number[]>();
-const CUTOUT_LIMIT = 15; // soatiga
-customerRouter.post(
-  '/personal/cutout',
-  designUpload.single('file'),
-  ah(async (req, res) => {
-    if (!req.file) throw badRequest('NO_FILE', 'Rasm topilmadi');
-    if (!aiEnabled()) throw badRequest('AI_DISABLED', 'AI hozircha o\'chirilgan');
-    const now = Date.now();
-    const hits = (cutoutHits.get(uid(req)) || []).filter((t) => now - t < 3600_000);
-    if (hits.length >= CUTOUT_LIMIT) throw badRequest('TOO_MANY', 'Juda ko\'p urinish, birozdan keyin qayta urinib ko\'ring');
-    hits.push(now);
-    cutoutHits.set(uid(req), hits);
-    let png: Buffer;
-    try {
-      png = await cutoutSubject(req.file.buffer);
-    } catch (e) {
-      throw badRequest('CUTOUT_FAILED', (e as Error).message || 'Fonni olib tashlab bo\'lmadi');
-    }
-    res.setHeader('Content-Type', 'image/png');
-    res.setHeader('Cache-Control', 'no-store');
-    res.send(png);
-  }),
-);
-
-customerRouter.post(
-  '/personal-orders',
-  ah(async (req, res) => {
-    const body = z
-      .object({
-        templateId: z.number().int().positive(),
-        designUrl: z.string().max(200),
-        qty: z.number().positive().max(1000),
-        deliveryType: z.enum(['PICKUP', 'DELIVERY']),
-        address: z.string().trim().max(500).optional(),
-        lat: z.number().min(-90).max(90).nullable().optional(),
-        lng: z.number().min(-180).max(180).nullable().optional(),
-        comment: z.string().trim().max(1000).optional(),
-      })
-      .parse(req.body);
-    const { templateId, designUrl, qty, ...rest } = body;
-    const order = await createOrder(req.actor!.user!, { ...rest, personal: { templateId, designUrl, qty } });
     res.status(201).json({ id: order.id, number: order.number });
   }),
 );

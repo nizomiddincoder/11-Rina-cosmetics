@@ -1,5 +1,4 @@
 import type { DeliveryType, OrderStatus, Prisma, Product, Role, User } from '@prisma/client';
-import { uploadExists } from './storage';
 import { prisma, getSettings } from '../db';
 import { logger } from '../logger';
 import { HttpError, badRequest, conflict, forbidden, notFound } from '../lib/errors';
@@ -56,8 +55,6 @@ export type CreateOrderInput = {
   lat?: number | null;
   lng?: number | null;
   comment?: string;
-  /** "Mening shokoladim": savatcha o'rniga bitta shaxsiy dizaynli qator */
-  personal?: { templateId: number; designUrl: string; qty: number };
 };
 
 type OrderLine = {
@@ -68,8 +65,6 @@ type OrderLine = {
   qty: number;
   priceSnapshot: number;
   lineTotal: number;
-  designUrl?: string;
-  templateId?: number;
 };
 
 async function cartLines(customer: User): Promise<OrderLine[]> {
@@ -101,29 +96,6 @@ async function cartLines(customer: User): Promise<OrderLine[]> {
   });
 }
 
-async function personalLines(p: NonNullable<CreateOrderInput['personal']>): Promise<OrderLine[]> {
-  const tpl = await prisma.personalTemplate.findFirst({ where: { id: p.templateId, isActive: true }, include: { product: true } });
-  if (!tpl || !tpl.product.isActive) throw badRequest('TEMPLATE_UNAVAILABLE', 'Bu shablon hozir mavjud emas');
-  const designOk = /^\/uploads\/designs\/[\w-]+\.jpg$/.test(p.designUrl) && (await uploadExists(p.designUrl));
-  if (!designOk) throw badRequest('BAD_DESIGN', 'Dizayn rasmi topilmadi, qaytadan tayyorlang');
-  const product = tpl.product;
-  const qty = round3(p.qty);
-  if (!validateQty(qty, toNum(product.step), toNum(product.minQty))) throw badRequest('BAD_QTY', 'Miqdor noto\'g\'ri');
-  return [
-    {
-      productId: product.id,
-      nameSnapshot: `${product.nameUz} (shaxsiy rasm)`,
-      nameRuSnapshot: `${product.nameRu} (с вашим фото)`,
-      unit: product.unit,
-      qty,
-      priceSnapshot: product.price,
-      lineTotal: lineTotal(qty, product.price),
-      designUrl: p.designUrl,
-      templateId: tpl.id,
-    },
-  ];
-}
-
 export async function createOrder(customer: User, input: CreateOrderInput) {
   const settings = await getSettings();
   if (!isWithinWorkHours(settings.workHoursStart, settings.workHoursEnd)) {
@@ -137,11 +109,9 @@ export async function createOrder(customer: User, input: CreateOrderInput) {
     throw badRequest('ADDRESS_REQUIRED', 'Yetkazish uchun joylashuv yoki manzil kerak');
   }
 
-  const isPersonal = !!input.personal;
-  const lines = isPersonal ? await personalLines(input.personal!) : await cartLines(customer);
+  const lines = await cartLines(customer);
   const itemsTotal = lines.reduce((s, l) => s + l.lineTotal, 0);
-  // Maxsus (shaxsiy rasmli) buyurtmaga minimal summa talabi qo'llanmaydi
-  if (!isPersonal && itemsTotal < settings.minOrderAmount) {
+  if (itemsTotal < settings.minOrderAmount) {
     throw badRequest('MIN_ORDER', 'Minimal buyurtma summasi yetarli emas', { minOrderAmount: settings.minOrderAmount, itemsTotal });
   }
   const deliveryFee =
@@ -174,7 +144,6 @@ export async function createOrder(customer: User, input: CreateOrderInput) {
     const created = await tx.order.create({
       data: {
         customerId: customer.id,
-        isPersonal,
         deliveryType: input.deliveryType,
         address: input.deliveryType === 'DELIVERY' ? (input.address || '').trim() : '',
         lat: input.deliveryType === 'DELIVERY' ? input.lat ?? null : null,
@@ -203,7 +172,7 @@ export async function createOrder(customer: User, input: CreateOrderInput) {
         },
       });
     }
-    if (!isPersonal) await tx.cartItem.deleteMany({ where: { userId: customer.id } });
+    await tx.cartItem.deleteMany({ where: { userId: customer.id } });
     return created;
   });
 

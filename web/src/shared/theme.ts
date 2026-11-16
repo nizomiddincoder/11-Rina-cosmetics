@@ -5,7 +5,7 @@ export type Theme = 'light' | 'dark';
 const KEY = 'theme';
 const EVENT = 'theme-change';
 // Telegram sarlavha/fon ranglari (styles.css dagi --c-bg bilan bir xil)
-const TG_COLORS: Record<Theme, string> = { light: '#FFFFFF', dark: '#160F0B' };
+const TG_COLORS: Record<Theme, string> = { light: '#FFFBFC', dark: '#180E13' };
 
 export function getTheme(): Theme {
   try {

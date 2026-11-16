@@ -16,7 +16,6 @@ export function StaffOrderCard({ o, onClick }: { o: Order; onClick: () => void }
         <div>
           <div className="flex items-center gap-2">
             <div className="font-display text-[19px] font-bold text-ink">#{o.number}</div>
-            {o.isPersonal && <Badge tone="accent">{t('personal.badge')}</Badge>}
           </div>
           <div className="text-[12px] text-muted">{dateTime(o.createdAt)}</div>
         </div>

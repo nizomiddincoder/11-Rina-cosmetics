@@ -27,7 +27,7 @@ export default {
         info: { DEFAULT: c('info'), soft: c('info-soft') },
       },
       fontFamily: {
-        // Matn: yumshoq, yumaloq Nunito; sarlavha va narxlar: shokolad butigi uslubidagi Playfair Display
+        // Matn: yumshoq, yumaloq Nunito; sarlavha va narxlar: nafis serif Playfair Display
         sans: ['Nunito', 'system-ui', 'sans-serif'],
         display: ['"Playfair Display"', 'Georgia', 'serif'],
       },
